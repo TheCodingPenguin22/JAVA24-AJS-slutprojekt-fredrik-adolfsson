@@ -52,3 +52,4 @@ export default tseslint.config({
   },
 })
 ```
+Slutproject advancerad javascript Java 24 Fredrik Adolfsson
