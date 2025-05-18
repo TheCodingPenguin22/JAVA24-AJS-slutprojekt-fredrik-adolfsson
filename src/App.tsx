@@ -102,6 +102,8 @@ function App() {
       </div>
       <footer className='h-50 w-full border flex flex-row'>
         <AddTeamMember
+          setTeamMembers={setTeamMembers}
+          teamMembers={teamMembers}
         />
         <div className='h-full border-l flex flex-col flex-wrap'>
           <p className='font-bold'>Team Members:</p>
