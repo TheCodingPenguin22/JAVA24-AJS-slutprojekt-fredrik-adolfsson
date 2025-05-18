@@ -32,9 +32,13 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
 
   // Adds the task to the team member
   function addTaskToTeamMember(teamMemberId: string) {
+
+    // Adds the teamMemberId to the current task.
     setTasks((prevState: tasksType[]) =>
       prevState.map((task: tasksType) =>
         task.id === id ? { ...task, teamMemberId: teamMemberId } : task));
+
+    // Add the taskID to the teamMember it was assigned to 
     setTeamMembers((prevState: teamMemberType[]) =>
       prevState.map((member: teamMemberType) =>
         member.id === teamMemberId ? { ...member, tasks: [...member.tasks, id] } : member));

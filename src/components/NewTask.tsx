@@ -35,12 +35,6 @@ export default function NewTask({ addTaskToTeamMember, handleStatusChange, teamM
 
     addTaskToTeamMember(selectedTeamMember);
     handleStatusChange('doing');
-
-
-
-
-
-
   }
   return (
     <form className="flex flex-row justify-between mr-4" onSubmit={handleSubmit}>

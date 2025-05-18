@@ -34,6 +34,7 @@ function App() {
   const [teamMembers, setTeamMembers] = useState<Array<teamMemberType>>([]);
 
 
+
   useEffect(() => {
     setTeamMembers([{ id: "919123mi", name: 'Kalle', category: 'Frontend', tasks: [] },
     { id: "1912uihh", name: 'Pelle', category: 'Backend', tasks: [] },
@@ -42,7 +43,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log(tasks);
   }, [tasks])
 
 
@@ -69,7 +69,8 @@ function App() {
           </ol>
 
 
-          <AddTask />
+          <AddTask tasks={tasks}
+            setTasks={setTasks} />
         </div>
         <div className='h-full border w-1/3'>
           <ol className='flex flex-col items-center'>
@@ -100,7 +101,8 @@ function App() {
         </div>
       </div>
       <footer className='h-50 w-full border flex flex-row'>
-        <AddTeamMember />
+        <AddTeamMember
+        />
         <div className='h-full border-l flex flex-col flex-wrap'>
           <p className='font-bold'>Team Members:</p>
           {teamMembers.map((member, index) => (
