@@ -9,7 +9,7 @@ export interface teamMemberType {
   id: string;
   name: string;
   category: string;
-  tasks: tasksType[];
+  tasks: string[];
 }
 export interface tasksType {
   id: string;
@@ -69,13 +69,12 @@ function App() {
           </ol>
 
           <button onClick={() => {
-            const newTask: tasksType = { id: '989a87asd', name: 'Another task', category: 'UX', timeStamp: new Date(), status: 'new', teamMemberId: '' };
+            const id = '989a87asd';
+            const newTask: tasksType = { id: id, name: 'Another task', category: 'UX', timeStamp: new Date(), status: 'new', teamMemberId: '' };
             setTasks([...tasks, newTask])
-            setTeamMembers(prevState => {
-              const newState = [...prevState];
-              newState[2].tasks?.push(tasks[tasks.length - 1]);
-              return newState;
-            })
+            setTeamMembers((prevState: teamMemberType[]) =>
+              prevState.map((member: teamMemberType) =>
+                member.id === id ? { ...member, tasks: [...member.tasks, id] } : member));
             console.log(tasks);
 
           }}>Click me!</button>

@@ -4,7 +4,6 @@ import NewTask from "./NewTask";
 import type { tasksType, teamMemberType } from "../App";
 import DoingTask from "./DoingTask";
 import DoneTask from "./DoneTask";
-import { useEffect } from "react";
 
 interface TaskProps {
   task: tasksType;
@@ -29,23 +28,27 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
       prevState.map((task: tasksType) =>
         task.id === id ? { ...task, status: status } : task));
   }
-  function addTeamMemberId(teamMemberId: string) {
 
-    console.log("addTeamMemberId called with:", teamMemberId, "id:", id);
+
+  // Adds the task to the team member
+  function addTaskToTeamMember(teamMemberId: string) {
     setTasks((prevState: tasksType[]) =>
       prevState.map((task: tasksType) =>
         task.id === id ? { ...task, teamMemberId: teamMemberId } : task));
+    setTeamMembers((prevState: teamMemberType[]) =>
+      prevState.map((member: teamMemberType) =>
+        member.id === teamMemberId ? { ...member, tasks: [...member.tasks, id] } : member));
+    console.log("teamMembers", teamMembers);
   }
-  useEffect(() => {
-    console.log("🔥 tasks updated in parent:", tasks);
-  }, [tasks]);
+
+
   return (
     <li className=" ml-10 flex flex-row w-fit items-center shadow-2xl mt-3 bg-white p-1 rounded-2xl px-4 min-w-50" >
       <span className="text-[8px] pr-4">
         <FontAwesomeIcon icon={faCircle} />
       </span>
       <details className="w-full">
-        <summary className="flex flex-row justify-between w-full">
+        <summary className="flex flex-row justify-between w-full cursor-pointer">
           <p className="font-bold">{name}</p>
 
           <span className="mr-4 size-0.5">
@@ -60,7 +63,7 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
           <div>
             {status === 'new' && <NewTask id={id}
               handleStatusChange={handleStatusChange}
-              addTeamMemberId={addTeamMemberId}
+              addTaskToTeamMember={addTaskToTeamMember}
               // This filter filters out all the team members that do not have the same category as the task.
               teamMembersFiltered={teamMembers.filter(member => member.category === category)}
               setTeamMembers={setTeamMembers}
@@ -70,7 +73,6 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
             {status === 'doing' && <DoingTask id={id}
               handleStatusChange={handleStatusChange}
               tasks={tasks}
-              setTasks={setTasks}
               teamMembers={teamMembers}
             />}
             {status === 'done' && <DoneTask />}
