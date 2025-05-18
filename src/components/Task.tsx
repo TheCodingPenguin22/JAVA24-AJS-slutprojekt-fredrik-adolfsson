@@ -1,21 +1,82 @@
-import type { teamMemberType } from "../App";
+import { faCaretLeft, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NewTask from "./NewTask";
+import type { tasksType, teamMemberType } from "../App";
+import DoingTask from "./DoingTask";
+import DoneTask from "./DoneTask";
+import { useEffect } from "react";
 
 interface TaskProps {
-  id: string;
-  name: string;
-  timeStamp: number;
-  category: string;
-  status: string
-  teamMember: teamMemberType | undefined;
+  task: tasksType;
+  tasks: tasksType[];
+  setTasks: Function;
+  teamMembers: teamMemberType[];
+  setTeamMembers: Function;
 }
+/*
+ * This component is responsible for rendering a given task.
+ */
+export default function Task({ task, tasks, setTasks, teamMembers, setTeamMembers }: TaskProps) {
+  const latesetTask = tasks.find(t => t.id === task.id) ?? task;
+  const { id, name, timeStamp, category, status } = latesetTask;
+  // Format Date
+  const timeStampString = timeStamp.toString().substring(4, 21);
+  const formatedDateString = timeStampString.slice(3, 6) + '/' + timeStampString.slice(0, 3) + '/' + timeStampString.slice(7);
 
-export default function Task({ id, name, timeStamp, category, status, teamMember }: TaskProps) {
-  function handleStatusChange() {
-    console.log("status change");
+  // Handles the changing of the status for the task
+  function handleStatusChange(status: string) {
+    setTasks((prevState: tasksType[]) =>
+      prevState.map((task: tasksType) =>
+        task.id === id ? { ...task, status: status } : task));
   }
+  function addTeamMemberId(teamMemberId: string) {
+
+    console.log("addTeamMemberId called with:", teamMemberId, "id:", id);
+    setTasks((prevState: tasksType[]) =>
+      prevState.map((task: tasksType) =>
+        task.id === id ? { ...task, teamMemberId: teamMemberId } : task));
+  }
+  useEffect(() => {
+    console.log("🔥 tasks updated in parent:", tasks);
+  }, [tasks]);
   return (
-    <li className=" ml-10 list-disc" onClick={handleStatusChange}>
-      <p>{name}</p>
+    <li className=" ml-10 flex flex-row w-fit items-center shadow-2xl mt-3 bg-white p-1 rounded-2xl px-4 min-w-50" >
+      <span className="text-[8px] pr-4">
+        <FontAwesomeIcon icon={faCircle} />
+      </span>
+      <details className="w-full">
+        <summary className="flex flex-row justify-between w-full">
+          <p className="font-bold">{name}</p>
+
+          <span className="mr-4 size-0.5">
+            <FontAwesomeIcon id="icon" icon={faCaretLeft} className="fa-lg" />
+          </span>
+        </summary>
+        <div className="flex flex-col">
+          <p>{formatedDateString}</p>
+          <div>
+            <p>{category}</p>
+          </div>
+          <div>
+            {status === 'new' && <NewTask id={id}
+              handleStatusChange={handleStatusChange}
+              addTeamMemberId={addTeamMemberId}
+              // This filter filters out all the team members that do not have the same category as the task.
+              teamMembersFiltered={teamMembers.filter(member => member.category === category)}
+              setTeamMembers={setTeamMembers}
+              tasks={tasks}
+              setTasks={setTasks}
+            />}
+            {status === 'doing' && <DoingTask id={id}
+              handleStatusChange={handleStatusChange}
+              tasks={tasks}
+              setTasks={setTasks}
+              teamMembers={teamMembers}
+            />}
+            {status === 'done' && <DoneTask />}
+          </div>
+        </div>
+      </details>
     </li>
   )
 }
