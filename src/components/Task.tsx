@@ -41,6 +41,12 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
     console.log("teamMembers", teamMembers);
   }
 
+  function removeTask() {
+    setTasks((prevState: tasksType[]) =>
+      prevState.filter((task: tasksType) =>
+        task.id !== id));
+  }
+
 
   return (
     <li className=" ml-10 flex flex-row w-fit items-center shadow-2xl mt-3 bg-white p-1 rounded-2xl px-4 min-w-50" >
@@ -75,7 +81,12 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
               tasks={tasks}
               teamMembers={teamMembers}
             />}
-            {status === 'done' && <DoneTask />}
+            {status === 'done' && <DoneTask id={id}
+              tasks={tasks}
+              teamMembers={teamMembers}
+              removeTask={removeTask}
+            />}
+
           </div>
         </div>
       </details>

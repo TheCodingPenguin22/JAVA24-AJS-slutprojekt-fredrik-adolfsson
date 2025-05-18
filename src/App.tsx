@@ -68,16 +68,6 @@ function App() {
             ))}
           </ol>
 
-          <button onClick={() => {
-            const id = '989a87asd';
-            const newTask: tasksType = { id: id, name: 'Another task', category: 'UX', timeStamp: new Date(), status: 'new', teamMemberId: '' };
-            setTasks([...tasks, newTask])
-            setTeamMembers((prevState: teamMemberType[]) =>
-              prevState.map((member: teamMemberType) =>
-                member.id === id ? { ...member, tasks: [...member.tasks, id] } : member));
-            console.log(tasks);
-
-          }}>Click me!</button>
 
           <AddTask />
         </div>
