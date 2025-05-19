@@ -4,6 +4,7 @@ import Task from './components/Task';
 import AddTask from './components/AddTask';
 import AddTeamMember from './components/AddTeamMember';
 import TeamMember from './components/TeamMember';
+import FilterAndSort from './components/FilterAndSort';
 
 export interface teamMemberType {
   id: string;
@@ -27,11 +28,12 @@ export interface tasksType {
   */
 function App() {
   const [tasks, setTasks] = useState<tasksType[]>([{
-    id: 'asuh9012', name: 'task 1', timeStamp: new Date(), category: 'Backend', status: 'doing', teamMemberId: ''
+    id: 'asuh9012', name: 'task 1', timeStamp: new Date(), category: 'Backend', status: 'doing', teamMemberId: '1912uihh'
   }, { id: 'aioasnj20', name: 'task 2', timeStamp: new Date(), category: 'Frontend', status: 'new', teamMemberId: '' },
-  { id: 'aklaioaj2098', name: 'task 3', timeStamp: new Date(), category: 'Frontend', status: 'done', teamMemberId: '' }
+  { id: 'aklaioaj2098', name: 'task 3', timeStamp: new Date(), category: 'Frontend', status: 'done', teamMemberId: '919123mi' }
   ]);
   const [teamMembers, setTeamMembers] = useState<Array<teamMemberType>>([]);
+  const [filteredAndSortedTasks, setFilteredAndSortedTasks] = useState<tasksType[]>(tasks);
 
 
 
@@ -43,13 +45,37 @@ function App() {
   }, []);
 
   useEffect(() => {
+    setFilteredAndSortedTasks(tasks);
   }, [tasks])
+
+  function applyFilterAndSort(sort: string, filter: string, sortOrder: string, filterValue: string) {
+    let tempTasks = [...tasks];
+    if (filter === 'category') {
+      tempTasks = tempTasks.filter(task => task.category === filterValue);
+    }
+    else if (filter === 'member') {
+      tempTasks = tempTasks.filter(task => task.teamMemberId === filterValue);
+    }
+    if (sort === 'time' && sortOrder === 'asc') {
+
+      console.log("sorting by time");
+
+      tempTasks.sort(function(x, y) { return x.timeStamp.getTime() - y.timeStamp.getTime() })
+    }
+    else if (sort === 'time' && sortOrder === 'desc') {
+      tempTasks.sort(function(x, y) { return y.timeStamp.getTime() - x.timeStamp.getTime() })
+    }
+
+    setFilteredAndSortedTasks(tempTasks);
+    console.log(tempTasks);
+  }
+
 
 
 
 
   return (
-    <main className='h-screen flex flex-col bg-gray-300' >
+    <main className='max-h-screen h-screen flex flex-col bg-gray-300' >
       <header className='w-full h-20 flex flex-row'>
         <div className='text-3xl font-bold w-1/3 flex justify-center items-center border'>To do</div>
         <div className='text-3xl font-bold w-1/3 flex justify-center items-center border '>Doing</div>
@@ -57,7 +83,7 @@ function App() {
       </header>
       <div className='h-[75%] flex flex-row'>
         <div className='h-full border w-1/3 flex flex-col justify-between '>
-          <ol className='flex flex-col items-center'>
+          <ol className='flex flex-col items-center  overflow-scroll'>
             {tasks.filter(item => item.status === "new").map(item => (
               <Task key={item.id}
                 task={item}
@@ -72,9 +98,9 @@ function App() {
           <AddTask tasks={tasks}
             setTasks={setTasks} />
         </div>
-        <div className='h-full border w-1/3'>
-          <ol className='flex flex-col items-center'>
-            {tasks.filter((item) => item.status === "doing").map(item => (
+        <div className='h-full border w-1/3 flex flex-col justify-between'>
+          <ol className='flex flex-col items-center overflow-scroll'>
+            {filteredAndSortedTasks.filter((item) => item.status === "doing").map(item => (
               <Task key={item.id}
                 task={item}
                 tasks={tasks}
@@ -85,9 +111,13 @@ function App() {
             ))}
 
           </ol>
+
+          <FilterAndSort teamMembers={teamMembers}
+            applyFilterAndSort={applyFilterAndSort}
+          />
         </div>
         <div className='h-full border w-1/3'>
-          <ol className='flex flex-col items-center'>
+          <ol className='flex flex-col items-center overflow-scroll'>
             {tasks.filter((item) => item.status === "done").map(item => (
               <Task key={item.id}
                 task={item}
@@ -113,7 +143,7 @@ function App() {
         </div>
       </footer>
 
-    </main>
+    </main >
   )
 }
 
