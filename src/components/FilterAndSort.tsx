@@ -13,11 +13,15 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
   const [filterValue, setFilterValue] = useState<string>('frontend');
   const [sort, setSort] = useState<string>('none');
   const [sortOder, setSortOrder] = useState<string>('asc')
+
+  // Handles the submit from the form
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     applyFilterAndSort(sort, filter, sortOder, filterValue);
   }
+
+  // Sets the filterValue to a default value when swhitching the filter category 
   useEffect(() => {
     if (filter === 'member') {
       if (teamMembers.length > 0) {

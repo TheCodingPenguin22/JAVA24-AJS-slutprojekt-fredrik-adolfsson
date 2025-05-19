@@ -38,11 +38,6 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
       prevState.map((task: tasksType) =>
         task.id === id ? { ...task, teamMemberId: teamMemberId } : task));
 
-    // Add the taskID to the teamMember it was assigned to 
-    setTeamMembers((prevState: teamMemberType[]) =>
-      prevState.map((member: teamMemberType) =>
-        member.id === teamMemberId ? { ...member, tasks: [...member.tasks, id] } : member));
-    console.log("teamMembers", teamMembers);
   }
 
   function removeTask() {

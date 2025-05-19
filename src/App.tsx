@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
 import Task from './components/Task';
 import AddTask from './components/AddTask';
 import AddTeamMember from './components/AddTeamMember';
 import TeamMember from './components/TeamMember';
 import FilterAndSort from './components/FilterAndSort';
+import { ref, set } from 'firebase/database';
+import { databse } from './util/firebase';
 
 export interface teamMemberType {
   id: string;
   name: string;
   category: string;
-  tasks: string[];
 }
 export interface tasksType {
   id: string;
@@ -38,12 +39,16 @@ function App() {
 
 
   useEffect(() => {
-    setTeamMembers([{ id: "919123mi", name: 'Kalle', category: 'Frontend', tasks: [] },
-    { id: "1912uihh", name: 'Pelle', category: 'Backend', tasks: [] },
-    { id: "998asdib", name: 'Hanna', category: 'UX', tasks: [] }]);
+    setTeamMembers([{ id: "919123mi", name: 'Kalle', category: 'Frontend' },
+    { id: "1912uihh", name: 'Pelle', category: 'Backend' },
+    { id: "998asdib", name: 'Hanna', category: 'UX' }]);
 
+    set(ref(databse, '/' + '123'), {
+      test: "testing"
+    });
   }, []);
 
+  // Updates FilterAndSortedTasks whenever tasks is updated.
   useEffect(() => {
     setFilteredAndSortedTasks(tasks);
   }, [tasks])
@@ -67,7 +72,6 @@ function App() {
     }
 
     setFilteredAndSortedTasks(tempTasks);
-    console.log(tempTasks);
   }
 
 
