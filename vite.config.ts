@@ -8,4 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  base: "/TheCodingPenguin22/JAVA24-AJS-slutprojekt-fredrik-adolfsson/"
 })
