@@ -1,18 +1,26 @@
+import { child, ref, update } from "firebase/database";
 import type { tasksType, teamMemberType } from "../App";
+import { database } from "../util/firebase";
 
 interface DoingTaskProps {
   id: string;
   tasks: tasksType[];
   teamMembers: teamMemberType[];
-  handleStatusChange: Function;
 }
 
-export default function DoingTask({ id, tasks, teamMembers, handleStatusChange }: DoingTaskProps) {
+export default function DoingTask({ id, tasks, teamMembers }: DoingTaskProps) {
   const task = tasks.find(t => t.id === id);
   const assignedTeamMember = teamMembers.find(m => m.id === task?.teamMemberId);
 
   function handleButtonClick() {
-    handleStatusChange('done');
+
+    const taskRef = child(ref(database, 'tasks'), id);
+    if (taskRef) {
+      update(taskRef, { status: 'done' });
+    }
+    else {
+      alert('Opps! Something went wrong! Try Again later!');
+    }
   }
   return (
     <div>

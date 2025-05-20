@@ -5,8 +5,8 @@ import AddTask from './components/AddTask';
 import AddTeamMember from './components/AddTeamMember';
 import TeamMember from './components/TeamMember';
 import FilterAndSort from './components/FilterAndSort';
-import { ref, set } from 'firebase/database';
-import { databse } from './util/firebase';
+import { onValue, ref } from 'firebase/database';
+import { database } from './util/firebase';
 
 export interface teamMemberType {
   id: string;
@@ -28,24 +28,51 @@ export interface tasksType {
  *
   */
 function App() {
-  const [tasks, setTasks] = useState<tasksType[]>([{
-    id: 'asuh9012', name: 'task 1', timeStamp: new Date(), category: 'Backend', status: 'doing', teamMemberId: '1912uihh'
-  }, { id: 'aioasnj20', name: 'task 2', timeStamp: new Date(), category: 'Frontend', status: 'new', teamMemberId: '' },
-  { id: 'aklaioaj2098', name: 'task 3', timeStamp: new Date(), category: 'Frontend', status: 'done', teamMemberId: '919123mi' }
-  ]);
+  const [tasks, setTasks] = useState<tasksType[]>([]);
   const [teamMembers, setTeamMembers] = useState<Array<teamMemberType>>([]);
   const [filteredAndSortedTasks, setFilteredAndSortedTasks] = useState<tasksType[]>(tasks);
+
+  const membersRef = ref(database, 'members');
+  const taskRef = ref(database, 'tasks');
 
 
 
   useEffect(() => {
-    setTeamMembers([{ id: "919123mi", name: 'Kalle', category: 'Frontend' },
-    { id: "1912uihh", name: 'Pelle', category: 'Backend' },
-    { id: "998asdib", name: 'Hanna', category: 'UX' }]);
+    try {
+      onValue(membersRef, snapshot => {
+        const teamMemberstemp: teamMemberType[] = [];
+        const members = snapshot.val();
 
-    set(ref(databse, '/' + '123'), {
-      test: "testing"
-    });
+        for (const member in members) {
+          teamMemberstemp.push({
+            id: member,
+            name: members[member].name,
+            category: members[member].category
+          })
+        }
+        setTeamMembers(teamMemberstemp);
+      })
+
+      onValue(taskRef, snapshot => {
+        const tasksTemp: tasksType[] = [];
+        const tasksSnapshot = snapshot.val();
+
+        for (const task in tasksSnapshot) {
+          tasksTemp.push({
+            id: task,
+            name: tasksSnapshot[task].name,
+            timeStamp: tasksSnapshot[task].timeStamp,
+            category: tasksSnapshot[task].category,
+            status: tasksSnapshot[task].status,
+            teamMemberId: tasksSnapshot[task].teamMemberId,
+          })
+        }
+        setTasks(tasksTemp);
+      })
+    }
+    catch (error) {
+      alert('Opps! Something went wrong! Try again later!');
+    }
   }, []);
 
   // Updates FilterAndSortedTasks whenever tasks is updated.
@@ -55,6 +82,9 @@ function App() {
 
   function applyFilterAndSort(sort: string, filter: string, sortOrder: string, filterValue: string) {
     let tempTasks = [...tasks];
+    if ((sort || filter || sortOrder || filterValue) === null) {
+      alert("Opps! Something went wrong! Try again later;")
+    }
     if (filter === 'category') {
       tempTasks = tempTasks.filter(task => task.category === filterValue);
     }
@@ -62,13 +92,16 @@ function App() {
       tempTasks = tempTasks.filter(task => task.teamMemberId === filterValue);
     }
     if (sort === 'time' && sortOrder === 'asc') {
-
-      console.log("sorting by time");
-
-      tempTasks.sort(function(x, y) { return x.timeStamp.getTime() - y.timeStamp.getTime() })
+      tempTasks.sort(function(x, y) { return Number(x.timeStamp) - Number(y.timeStamp) })
     }
     else if (sort === 'time' && sortOrder === 'desc') {
-      tempTasks.sort(function(x, y) { return y.timeStamp.getTime() - x.timeStamp.getTime() })
+      tempTasks.sort(function(x, y) { return Number(y.timeStamp) - Number(x.timeStamp) })
+    }
+    if (sort === 'title' && sortOrder === 'asc') {
+      tempTasks.sort((x, y) => y.name.localeCompare(x.name));
+    }
+    else if (sort === 'title' && sortOrder === 'desc') {
+      tempTasks.sort((x, y) => x.name.localeCompare(y.name));
     }
 
     setFilteredAndSortedTasks(tempTasks);
@@ -99,8 +132,7 @@ function App() {
           </ol>
 
 
-          <AddTask tasks={tasks}
-            setTasks={setTasks} />
+          <AddTask tasksRef={taskRef} />
         </div>
         <div className='h-full border w-1/3 flex flex-col justify-between'>
           <ol className='flex flex-col items-center overflow-scroll'>
@@ -136,13 +168,12 @@ function App() {
       </div>
       <footer className='h-50 w-full border flex flex-row'>
         <AddTeamMember
-          setTeamMembers={setTeamMembers}
-          teamMembers={teamMembers}
+          membersRef={membersRef}
         />
         <div className='h-full border-l flex flex-col flex-wrap'>
           <p className='font-bold'>Team Members:</p>
           {teamMembers.map((member, index) => (
-            <TeamMember key={index} id={member.id} name={member.name} category={member.category} tasks={member.tasks} />
+            <TeamMember key={index} id={member.id} name={member.name} category={member.category} />
           ))}
         </div>
       </footer>

@@ -1,17 +1,24 @@
+import { child, ref, remove } from "firebase/database";
 import type { tasksType, teamMemberType } from "../App";
+import { database } from "../util/firebase";
 
 interface DoneTaskProps {
   id: string;
   tasks: tasksType[];
   teamMembers: teamMemberType[];
-  removeTask: Function;
 }
-export default function DoneTask({ id, tasks, teamMembers, removeTask }: DoneTaskProps) {
+export default function DoneTask({ id, tasks, teamMembers }: DoneTaskProps) {
   const task = tasks.find(t => t.id === id);
   const assignedTeamMember = teamMembers.find(m => m.id === task?.teamMemberId);
 
   function handleButtonClick() {
-    removeTask();
+    const taskRef = child(ref(database, 'tasks'), id);
+    if (taskRef) {
+      remove(taskRef);
+    }
+    else {
+      alert('Opps! Something went wrong! Try again later!');
+    }
   }
   return (
     <div>

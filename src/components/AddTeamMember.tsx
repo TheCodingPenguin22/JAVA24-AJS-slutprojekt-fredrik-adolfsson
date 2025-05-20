@@ -1,20 +1,27 @@
 import { useState } from "react";
-import type { teamMemberType } from "../App";
+import { push, ref, update, type DatabaseReference } from "firebase/database";
+import { database } from "../util/firebase";
 
 interface AddTeamMemberProps {
-  setTeamMembers: Function;
-  teamMembers: teamMemberType[];
+  membersRef: DatabaseReference;
 }
-export default function AddTeamMember({ setTeamMembers, teamMembers }: AddTeamMemberProps) {
+export default function AddTeamMember({ membersRef }: AddTeamMemberProps) {
   const [name, setName] = useState<string>('');
   const [category, setCategory] = useState<string>('Frontend');
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const newTeamMember: teamMemberType = { id: String(Math.random()), name: name, category: category, tasks: [] };
-    setTeamMembers([
-      ...teamMembers,
-      newTeamMember
-    ])
+
+    const newTeamMemberId = push(membersRef).key;
+    if (newTeamMemberId) {
+      const newTeamMember = {
+        name: name,
+        category: category,
+      };
+
+      const newTeamMemberRef = ref(database, 'members/' + newTeamMemberId);
+      update(newTeamMemberRef, newTeamMember);
+    }
+
   }
   return (
     <form className="border-r-1 w-1/3 pr-1 h-full flex flex-col" onSubmit={handleSubmit}>

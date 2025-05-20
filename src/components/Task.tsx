@@ -15,37 +15,12 @@ interface TaskProps {
 /*
  * This component is responsible for rendering a given task.
  */
-export default function Task({ task, tasks, setTasks, teamMembers, setTeamMembers }: TaskProps) {
+export default function Task({ task, tasks, teamMembers }: TaskProps) {
   const latesetTask = tasks.find(t => t.id === task.id) ?? task;
   const { id, name, timeStamp, category, status } = latesetTask;
   // Format Date
-  const timeStampString = timeStamp.toString().substring(4, 21);
+  const timeStampString = new Date(timeStamp).toString().substring(4, 21);
   const formatedDateString = timeStampString.slice(3, 6) + '/' + timeStampString.slice(0, 3) + '/' + timeStampString.slice(7);
-
-  // Handles the changing of the status for the task
-  function handleStatusChange(status: string) {
-    setTasks((prevState: tasksType[]) =>
-      prevState.map((task: tasksType) =>
-        task.id === id ? { ...task, status: status } : task));
-  }
-
-
-  // Adds the task to the team member
-  function addTaskToTeamMember(teamMemberId: string) {
-
-    // Adds the teamMemberId to the current task.
-    setTasks((prevState: tasksType[]) =>
-      prevState.map((task: tasksType) =>
-        task.id === id ? { ...task, teamMemberId: teamMemberId } : task));
-
-  }
-
-  function removeTask() {
-    setTasks((prevState: tasksType[]) =>
-      prevState.filter((task: tasksType) =>
-        task.id !== id));
-  }
-
 
   return (
     <li className=" ml-10 flex flex-row w-fit items-center shadow-2xl mt-3 bg-white p-1 rounded-2xl px-4 min-w-50" >
@@ -67,23 +42,16 @@ export default function Task({ task, tasks, setTasks, teamMembers, setTeamMember
           </div>
           <div>
             {status === 'new' && <NewTask id={id}
-              handleStatusChange={handleStatusChange}
-              addTaskToTeamMember={addTaskToTeamMember}
               // This filter filters out all the team members that do not have the same category as the task.
               teamMembersFiltered={teamMembers.filter(member => member.category === category)}
-              setTeamMembers={setTeamMembers}
-              tasks={tasks}
-              setTasks={setTasks}
             />}
             {status === 'doing' && <DoingTask id={id}
-              handleStatusChange={handleStatusChange}
               tasks={tasks}
               teamMembers={teamMembers}
             />}
             {status === 'done' && <DoneTask id={id}
               tasks={tasks}
               teamMembers={teamMembers}
-              removeTask={removeTask}
             />}
 
           </div>

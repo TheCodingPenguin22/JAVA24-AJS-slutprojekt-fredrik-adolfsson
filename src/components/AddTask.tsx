@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretLeft } from "@fortawesome/free-solid-svg-icons/faCaretLeft";
-import type { tasksType } from "../App";
 import { useState } from "react";
+import { push, ref, update, type DatabaseReference } from "firebase/database";
+import { database } from "../util/firebase";
 
 interface AddTaskProps {
-  setTasks: Function;
-  tasks: tasksType[];
+  tasksRef: DatabaseReference;
 }
 /*
  * The purpose of this component is to add a task.
@@ -15,23 +15,30 @@ interface AddTaskProps {
  * Very nice! 
  * No js(ts) needed!
  */
-export default function AddTask({ setTasks, tasks }: AddTaskProps) {
+export default function AddTask({ tasksRef }: AddTaskProps) {
   const [taskName, setTaskName] = useState<string>('')
   const [taskCategory, setTaskCategory] = useState<string>('Frontend');
 
   // Handles the adding of a new task
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    console.log("submit");
 
-    if (!taskCategory) {
+    const newTaskId = push(tasksRef).key;
 
+    if (newTaskId) {
+      const newTask = {
+        name: taskName,
+        category: taskCategory,
+        timeStamp: Date.now(),
+        status: 'new',
+        TeamMemberId: ''
+      };
+
+      const newTaskRef = ref(database, 'tasks/' + newTaskId);
+      update(newTaskRef, newTask);
     }
-    const newTask: tasksType = { id: String(Math.random()), name: taskName, category: taskCategory, timeStamp: new Date(), status: 'new', teamMemberId: '' };
 
-    setTasks([...tasks, newTask]);
 
-    console.log(tasks);
 
   }
   return (
