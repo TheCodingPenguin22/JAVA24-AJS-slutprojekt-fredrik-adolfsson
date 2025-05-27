@@ -4,7 +4,9 @@
 ---
 
 ```
-  git clone <URL>
-  npm i
-  npm run dev
+  1. git clone <URL>
+  2. cd JAVA24-AJS-slutprojekt-fredrik-adolfsson
+  3. npm i
+  4. Add Firebase realtime database info to a .env file in root folder
+  5. npm run dev
 ```
