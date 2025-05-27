@@ -1,8 +1,9 @@
 # Slutproject advancerad javascript Java 24 Fredrik Adolfsson
 
+Detta projekt använders sig av Vite
+
 ## För att köra detta projekt
 
-Detta projekt använders sig av Vite
 ---
 
 ```
