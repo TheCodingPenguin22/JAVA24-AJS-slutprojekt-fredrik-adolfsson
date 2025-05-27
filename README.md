@@ -3,7 +3,14 @@
 ## För att köra detta projekt
 ---
 
-
+```
+```
+```
   git clone <URL>
   npm i
   npm run dev
+```
+```
+```
+```
+```
