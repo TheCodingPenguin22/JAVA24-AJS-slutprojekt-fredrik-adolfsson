@@ -28,7 +28,10 @@ export default function NewTask({ id, teamMembersFiltered }: newTaskProps) {
     event.preventDefault();
 
     // Makes sure that there is some value in the selectedTeamMember variable.
-    if (!selectedTeamMember) return;
+    if (!selectedTeamMember) {
+      alert("No Team member selected.");
+      return;
+    }
 
     const taskRef = child(ref(database, 'tasks'), id);
     if (taskRef) {
@@ -50,7 +53,7 @@ export default function NewTask({ id, teamMembersFiltered }: newTaskProps) {
           <option key={member.id} value={member.id}>{member.name}</option>
         ))}
       </select>
-      <button type="submit" className="bg-purple-600 text-white px-2 rounded-2xl">Add</button>
+      <button type="submit" className="bg-purple-600 text-white px-2 rounded-2xl cursor-pointer">Add</button>
     </form >
   )
 }

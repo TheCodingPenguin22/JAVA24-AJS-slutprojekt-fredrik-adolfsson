@@ -97,7 +97,7 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
           }
 
         </div>
-        <button type="submit" className="border cursor-pointer">Apply Filter</button>
+        <button type="submit" className="border cursor-pointer mb-2 mr-2">Apply Filter</button>
       </form >
     </details>
   )

@@ -23,6 +23,11 @@ export default function AddTask({ tasksRef }: AddTaskProps) {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
+    if (!taskName) {
+      alert("No task name given. Please enter a name for the new task.");
+      return;
+    }
+
     const newTaskId = push(tasksRef).key;
 
     if (newTaskId) {
@@ -62,7 +67,7 @@ export default function AddTask({ tasksRef }: AddTaskProps) {
             <option value="Backend">Backend</option>
             <option value="UX">UX</option>
           </select>
-          <button type="submit" className="border w-fit self-center my-3">Add Task</button>
+          <button type="submit" className="border w-fit self-center my-3 cursor-pointer">Add Task</button>
         </div>
       </form>
     </details>

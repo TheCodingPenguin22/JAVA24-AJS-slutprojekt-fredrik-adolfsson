@@ -11,6 +11,11 @@ export default function AddTeamMember({ membersRef }: AddTeamMemberProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!name) {
+      alert("No name given for new team member. Please enter one.");
+      return;
+    }
+
     const newTeamMemberId = push(membersRef).key;
     if (newTeamMemberId) {
       const newTeamMember = {
@@ -36,7 +41,7 @@ export default function AddTeamMember({ membersRef }: AddTeamMemberProps) {
           <option value="UX">UX</option>
         </select>
       </div>
-      <button type="submit" className="border h-fit w-fit items-center justify-center ml-3 mt-1">Add member</button>
+      <button type="submit" className="border h-fit w-fit items-center justify-center ml-3 mt-1 cursor-pointer">Add member</button>
     </form>
   )
 }
