@@ -6,8 +6,8 @@ interface AddTeamMemberProps {
   membersRef: DatabaseReference;
 }
 export default function AddTeamMember({ membersRef }: AddTeamMemberProps) {
-  const [name, setName] = useState<string>('');
-  const [category, setCategory] = useState<string>('Frontend');
+  let name = '';
+  let category = 'Frontend';
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -33,9 +33,9 @@ export default function AddTeamMember({ membersRef }: AddTeamMemberProps) {
       <p className="font-bold pl-1">Add Teammember:</p>
       <div className="flex flex-col w-3/5 pl-3">
         <label htmlFor="teamMemberName">Name:</label>
-        <input type="text" className="border" name="teamMemberName" onChange={e => setName(e.target.value)} />
+        <input type="text" className="border" name="teamMemberName" onChange={e => name = e.target.value} />
         <label htmlFor="teamMemberCategory">Role:</label>
-        <select name="teamMemberCategory" className="border mt-2" onChange={e => setCategory(e.target.value)}>
+        <select name="teamMemberCategory" className="border mt-2" onChange={e => category = e.target.value}>
           <option value="Frontend">Frontend</option>
           <option value="Backend">Backend</option>
           <option value="UX">UX</option>

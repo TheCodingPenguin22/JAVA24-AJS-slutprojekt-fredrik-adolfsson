@@ -8,10 +8,13 @@ interface DoneTaskProps {
   teamMembers: teamMemberType[];
 }
 export default function DoneTask({ id, tasks, teamMembers }: DoneTaskProps) {
+  // Finds the current task with the id.
   const task = tasks.find(t => t.id === id);
+  // Finds the assigned team member.
   const assignedTeamMember = teamMembers.find(m => m.id === task?.teamMemberId);
 
   function handleButtonClick() {
+    // Find the child with the given id in the tasks array.
     const taskRef = child(ref(database, 'tasks'), id);
     if (taskRef) {
       remove(taskRef);

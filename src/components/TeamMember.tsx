@@ -11,6 +11,7 @@ interface TeamMemberProps {
 
 export default function TeamMember({ id, name, category }: TeamMemberProps) {
   function handleOnClick() {
+    // Gets the child with the given id in the members array.
     const memberRef = child((ref(database, 'members')), id);
     if (memberRef) {
       remove(memberRef);

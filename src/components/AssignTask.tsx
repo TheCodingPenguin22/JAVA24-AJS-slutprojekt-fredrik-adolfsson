@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { teamMemberType } from "../App";
 import { child, ref, update } from "firebase/database";
 import { database } from "../util/firebase";
@@ -15,12 +15,11 @@ interface newTaskProps {
  */
 export default function NewTask({ id, teamMembersFiltered }: newTaskProps) {
 
-  const [selectedTeamMember, setSelectedTeamMember] = useState<string>(() =>
-    teamMembersFiltered.length > 0 ? teamMembersFiltered[0].id : '');
+  let selectedTeamMember: string = teamMembersFiltered.length > 0 ? teamMembersFiltered[0].id : '';
 
   useEffect(() => {
     if (teamMembersFiltered.length > 0) {
-      setSelectedTeamMember(teamMembersFiltered[0].id);
+      selectedTeamMember = teamMembersFiltered[0].id;
     }
   }, [teamMembersFiltered])
 
@@ -47,7 +46,7 @@ export default function NewTask({ id, teamMembersFiltered }: newTaskProps) {
   }
   return (
     <form className="flex flex-row justify-between mr-4" onSubmit={handleSubmit}>
-      <select className="border rounded-md p-1" onChange={(event) => setSelectedTeamMember(event.target.value)} >
+      <select className="border rounded-md p-1" onChange={(event) => selectedTeamMember = event.target.value} >
 
         {teamMembersFiltered.map((member) => (
           <option key={member.id} value={member.id}>{member.name}</option>

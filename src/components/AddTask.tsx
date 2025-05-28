@@ -10,14 +10,10 @@ interface AddTaskProps {
 /*
  * The purpose of this component is to add a task.
  *
- * This is done through a form element.
- * The form is hidden with a details tag. 
- * Very nice! 
- * No js(ts) needed!
  */
 export default function AddTask({ tasksRef }: AddTaskProps) {
-  const [taskName, setTaskName] = useState<string>('')
-  const [taskCategory, setTaskCategory] = useState<string>('Frontend');
+  let taskName: string = '';
+  let taskCategory: string = 'Frontend';
 
   // Handles the adding of a new task
   function handleSubmit(event: React.FormEvent) {
@@ -57,12 +53,12 @@ export default function AddTask({ tasksRef }: AddTaskProps) {
       <form className="" onSubmit={handleSubmit}>
         <div className="flex flex-col mr-3 ml-3">
           <label htmlFor="taskName">Name of Task:</label>
-          <input type="text" className="border" name="taskName" onChange={e => setTaskName(e.target.value)} />
+          <input type="text" className="border" name="taskName" onChange={e => taskName = e.target.value} />
 
           <label htmlFor="taskCategory">Category:</label>
           <select name="taskCategory"
             className="border"
-            defaultValue={'Frontend'} onChange={e => setTaskCategory(e.target.value)}>
+            defaultValue={'Frontend'} onChange={e => taskCategory = e.target.value}>
             <option value="Frontend">Frontend</option>
             <option value="Backend">Backend</option>
             <option value="UX">UX</option>

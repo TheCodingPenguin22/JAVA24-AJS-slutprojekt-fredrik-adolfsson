@@ -9,10 +9,10 @@ interface FlterAndSortProps {
 }
 
 export default function FilterAndSort({ applyFilterAndSort, teamMembers }: FlterAndSortProps) {
-  const [filter, setFilter] = useState<string>('none')
-  const [filterValue, setFilterValue] = useState<string>('frontend');
+  const [filter, setFilter] = useState<string>('');
+  let filterValue: string = 'Frontend';
   const [sort, setSort] = useState<string>('none');
-  const [sortOder, setSortOrder] = useState<string>('asc')
+  let sortOder: string = 'asc';
 
   // Handles the submit from the form
   function handleSubmit(e: React.FormEvent) {
@@ -25,11 +25,11 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
   useEffect(() => {
     if (filter === 'member') {
       if (teamMembers.length > 0) {
-        setFilterValue(teamMembers[0].id);
+        filterValue = teamMembers[0].id;
       }
     }
     else if (filter === 'category') {
-      setFilterValue('Frontend');
+      filterValue = 'Frontend';
     }
   }, [filter])
 
@@ -58,7 +58,7 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
 
             <div>
               <label htmlFor="member" className="font-bold ml-2">Member: </label>
-              <select name="member" className="border ml-2" onChange={e => setFilterValue(e.target.value)}>
+              <select name="member" className="border ml-2" onChange={e => filterValue = e.target.value}>
                 {teamMembers.map(member => (
                   <option key={member.id} value={member.id}>{member.name}</option>
                 ))}
@@ -68,7 +68,7 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
           {filter === 'category' &&
             <div>
               <label htmlFor="category" className="font-bold ml-2">Category: </label>
-              <select name="category" className="border ml-2" onChange={e => setFilterValue(e.target.value)}>
+              <select name="category" className="border ml-2" onChange={e => filterValue = e.target.value}>
                 <option value="Frontend">Frontend</option>
                 <option value="Backend">Backend</option>
                 <option value="UX">UX</option>
@@ -89,7 +89,7 @@ export default function FilterAndSort({ applyFilterAndSort, teamMembers }: Flter
           {sort !== 'none' &&
             <div>
               <label htmlFor="order" className="font-bold ml-2">Order:</label>
-              <select name="order" className="border ml-2" onChange={e => setSortOrder(e.target.value)}>
+              <select name="order" className="border ml-2" onChange={e => sortOder = e.target.value}>
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>

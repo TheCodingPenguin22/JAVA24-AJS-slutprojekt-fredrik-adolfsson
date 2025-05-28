@@ -1,7 +1,6 @@
 # Slutproject advancerad javascript Java 24 Fredrik Adolfsson
 
 Detta projekt använders sig av Vite
-
 ## För att köra detta projekt
 
 ---
@@ -13,3 +12,14 @@ Detta projekt använders sig av Vite
   4. Add Firebase realtime database info to a .env file in root folder
   5. npm run dev
 ```
+
+
+## Struktur
+ - App.tsx
+  - Task.tsx
+    - AssignTask.tsx
+    - MarkTaskAsDone.tsx
+    - RemoveTask.tsx
+  - AddTask.tsx
+  - AddTeamMember.tsx
+  

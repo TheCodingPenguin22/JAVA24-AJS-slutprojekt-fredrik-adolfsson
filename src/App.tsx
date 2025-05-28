@@ -25,7 +25,6 @@ export interface tasksType {
  * This is the main app function.
  * This is where the main structure of the page is made and all the components are added.
  *
- *
   */
 function App() {
   const [tasks, setTasks] = useState<tasksType[]>([]);
@@ -92,10 +91,10 @@ function App() {
       tempTasks = tempTasks.filter(task => task.teamMemberId === filterValue);
     }
     if (sort === 'time' && sortOrder === 'asc') {
-      tempTasks.sort(function(x, y) { return Number(x.timeStamp) - Number(y.timeStamp) })
+      tempTasks.sort(function (x, y) { return Number(x.timeStamp) - Number(y.timeStamp) })
     }
     else if (sort === 'time' && sortOrder === 'desc') {
-      tempTasks.sort(function(x, y) { return Number(y.timeStamp) - Number(x.timeStamp) })
+      tempTasks.sort(function (x, y) { return Number(y.timeStamp) - Number(x.timeStamp) })
     }
     if (sort === 'title' && sortOrder === 'asc') {
       tempTasks.sort((x, y) => y.name.localeCompare(x.name));

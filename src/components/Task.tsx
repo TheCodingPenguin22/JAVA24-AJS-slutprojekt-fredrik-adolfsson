@@ -1,9 +1,9 @@
 import { faCaretLeft, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import NewTask from "./NewTask";
+import AssignTask from "./AssignTask";
 import type { tasksType, teamMemberType } from "../App";
-import DoingTask from "./DoingTask";
-import DoneTask from "./DoneTask";
+import MarkTaskAsDone from "./MarkTaskAsDone";
+import RemoveTask from "./RemoveTask";
 
 interface TaskProps {
   task: tasksType;
@@ -14,8 +14,13 @@ interface TaskProps {
 }
 /*
  * This component is responsible for rendering a given task.
+ *
+ * If status of task is 'new' it renders the AssignTask component.
+ * If status is 'doing' it renders MarkAsDoneTask component.
+ * If statis is 'done' it renders RemoveTask component.
  */
 export default function Task({ task, tasks, teamMembers }: TaskProps) {
+  // Tries to find the latest version of the task and if it does not find it it uses the given task.
   const latesetTask = tasks.find(t => t.id === task.id) ?? task;
   const { id, name, timeStamp, category, status } = latesetTask;
   // Format Date
@@ -41,15 +46,15 @@ export default function Task({ task, tasks, teamMembers }: TaskProps) {
             <p>{category}</p>
           </div>
           <div>
-            {status === 'new' && <NewTask id={id}
+            {status === 'new' && <AssignTask id={id}
               // This filter filters out all the team members that do not have the same category as the task.
               teamMembersFiltered={teamMembers.filter(member => member.category === category)}
             />}
-            {status === 'doing' && <DoingTask id={id}
+            {status === 'doing' && <MarkTaskAsDone id={id}
               tasks={tasks}
               teamMembers={teamMembers}
             />}
-            {status === 'done' && <DoneTask id={id}
+            {status === 'done' && <RemoveTask id={id}
               tasks={tasks}
               teamMembers={teamMembers}
             />}
